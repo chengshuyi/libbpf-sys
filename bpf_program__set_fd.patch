@@ -1,0 +1,28 @@
+diff --git a/src/libbpf.c b/src/libbpf.c
+index e1d7e34..de14ebe 100644
+--- a/src/libbpf.c
++++ b/src/libbpf.c
+@@ -8304,6 +8304,11 @@ size_t bpf_program__insn_cnt(const struct bpf_program *prog)
+ 	return prog->insns_cnt;
+ }
+ 
++void bpf_program__set_fd(struct bpf_program *prog, int fd)
++{
++	prog->instances.fds[0] = fd;
++}
++
+ int bpf_program__set_prep(struct bpf_program *prog, int nr_instances,
+ 			  bpf_program_prep_t prep)
+ {
+diff --git a/src/libbpf.h b/src/libbpf.h
+index d02139f..83c59ea 100644
+--- a/src/libbpf.h
++++ b/src/libbpf.h
+@@ -265,6 +265,7 @@ LIBBPF_API const struct bpf_insn *bpf_program__insns(const struct bpf_program *p
+  * **bpf_object** lifetime.
+  */
+ LIBBPF_API size_t bpf_program__insn_cnt(const struct bpf_program *prog);
++LIBBPF_API void bpf_program__set_fd(struct bpf_program *prog, int fd);
+ 
+ LIBBPF_DEPRECATED_SINCE(0, 6, "use bpf_object__load() instead")
+ LIBBPF_API int bpf_program__load(struct bpf_program *prog, const char *license, __u32 kern_version);
