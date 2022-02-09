@@ -7,6 +7,7 @@ use std::io::prelude::*;
 use std::os::unix::prelude::*;
 use std::path;
 use std::process;
+use std::process::Command;
 
 fn main() {
     let src_dir = path::PathBuf::from(env::var_os("CARGO_MANIFEST_DIR").unwrap());
@@ -18,6 +19,11 @@ fn main() {
             env::var("CARGO_CFG_TARGET_OS").unwrap()
         );
     }
+    
+    let output = Command::new("sh")
+    .arg("patch.sh")
+    .output()
+    .expect("Failed to execute command");
 
     if cfg!(feature = "novendor") {
         let libbpf = pkg_config::Config::new()
